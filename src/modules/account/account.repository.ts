@@ -2,11 +2,23 @@ import { prisma } from "../../config/database";
 import { UpdateAccountData } from "./account.model";
 
 export const AccountRepository = {
-  async getManyAccountByUserId(userId: number) {
-    const res = prisma.account.findMany({
-      where: { userId, isActive: true },
-    });
-    return res;
+  async getManyAccountByUserId(userId: number, type?: "cash" | "bank") {
+    const where = { userId, isActive: true, ...(type && { type }) }
+    const [accounts, result] = await Promise.all([
+      prisma.account.findMany({
+            where,
+          }),
+          prisma.account.aggregate({
+            where,
+            _sum: {
+              balance: true
+            }
+          })
+    ]) 
+    return {
+      accounts,
+      totalBalance: result._sum.balance ?? 0
+    };
   },
 
   async getExistAccount(userId: number, accountId: number) {

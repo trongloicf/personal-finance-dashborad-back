@@ -3,13 +3,16 @@ import { UpdateAccountData } from "./account.model";
 import { AccountRepository } from "./account.repository";
 
 export const AccountService = {
-  async getAccounts(userId: number) {
-    const accounts = await AccountRepository.getManyAccountByUserId(userId);
+  async getAccounts(userId: number, type?: "cash" | "bank") {
+     const { accounts, totalBalance } = await AccountRepository.getManyAccountByUserId(userId, type);
     const result = accounts.map((a) => ({
       ...a,
       balance: Number(a.balance),
     }));
-    return result;
+    return {
+      accounts: result,
+      totalBalance: Number(totalBalance)
+    };
   },
 
   async createAccount(

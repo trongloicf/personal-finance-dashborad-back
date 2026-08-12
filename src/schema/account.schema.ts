@@ -17,3 +17,7 @@ export const updateAccountSchema = z.object({
 export const accountIdSchema = z.object({
   accountId: z.coerce.number().int().positive(),
 });
+
+export const getAccountsQuerySchema = z.object({
+  type: z.enum(["cash", "bank"]).optional(),
+});
