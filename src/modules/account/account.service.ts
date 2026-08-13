@@ -4,14 +4,15 @@ import { AccountRepository } from "./account.repository";
 
 export const AccountService = {
   async getAccounts(userId: number, type?: "cash" | "bank") {
-     const { accounts, totalBalance } = await AccountRepository.getManyAccountByUserId(userId, type);
+    const { accounts, totalBalance } =
+      await AccountRepository.getManyAccountByUserId(userId, type);
     const result = accounts.map((a) => ({
       ...a,
       balance: Number(a.balance),
     }));
     return {
       accounts: result,
-      totalBalance: Number(totalBalance)
+      totalBalance: Number(totalBalance),
     };
   },
 
@@ -41,8 +42,9 @@ export const AccountService = {
     accountId: number,
     data: UpdateAccountData,
   ) {
-    const account = await AccountRepository.getExistAccount(userId, accountId)
-    if (!account || account.userId !== userId) throw new NotFoundError('Account not found')
-    return AccountRepository.updateAccount(accountId, data)
+    const account = await AccountRepository.getExistAccount(userId, accountId);
+    if (!account || account.userId !== userId)
+      throw new NotFoundError("Account not found");
+    return AccountRepository.updateAccount(accountId, data);
   },
 };

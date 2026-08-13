@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AccountService } from "./account.service";
 import {
   accountIdSchema,
-  createAccountSchema,
   getAccountsQuerySchema,
-  updateAccountSchema,
 } from "../../schema/account.schema";
 
 export const AccountController = {
